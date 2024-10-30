@@ -48,9 +48,11 @@ resource "aws_subnet" "application-subnet2" {
     name = "application-subnet2"
   }
 }
-
 #creating internet gateway
-resource "aws_internet_gateway" "yashigw" {# Creating  route table
+resource "aws_internet_gateway" "yashigw" {
+  vpc_id = aws_vpc.yashvpc.id
+}
+# Creating  route table
 resource "aws_route_table" "public-route-table" {
   vpc_id = aws_vpc.yashvpc.id
   route {
@@ -75,16 +77,12 @@ resource "aws_route_table_association" "rt2" {
 }
 #creating security group
 
-resource "aws_security_group" "securitygroup" { 
+resource "aws_security_group" "securitygroup" {
+  vpc_id = aws_vpc.yashvpc.id
+  #inbound Rules
   ingress {
     from_port   = 80
     to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 8000
-    to_port     = 8000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -100,15 +98,23 @@ resource "aws_security_group" "securitygroup" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = 8000
+    to_port     = 8000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }  tags = {
+  }
+  tags = {
     Name = "securitygroup"
   }
 }
+
 
 #creating EC2 instance
 resource "aws_instance" "fish" {
