@@ -30,6 +30,7 @@ resource "aws_subnet" "web-subnet2" {
     name = "web-subnet2"
   }
 }
+
 resource "aws_subnet" "application-subnet1" {
   vpc_id                  = aws_vpc.yashvpc.id
   cidr_block              = "10.0.3.0/24"
@@ -87,6 +88,12 @@ resource "aws_security_group" "securitygroup" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
+    from_port   = 8000
+    to_port     = 8000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
@@ -95,12 +102,6 @@ resource "aws_security_group" "securitygroup" {
   ingress {
     from_port   = 22
     to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 8000
-    to_port     = 8000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -115,7 +116,6 @@ resource "aws_security_group" "securitygroup" {
   }
 }
 
-
 #creating EC2 instance
 resource "aws_instance" "fish" {
   ami                         = "ami-0ddc798b3f1a5117e"
@@ -128,10 +128,4 @@ resource "aws_instance" "fish" {
   tags = {
     Name = "yash"
   }
-}
-
-  vpc_id = aws_vpc.yashvpc.id
-  #inbound Rules
-
-  vpc_id = aws_vpc.yashvpc.id
 }
