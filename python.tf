@@ -118,7 +118,7 @@ resource "aws_security_group" "securitygroup" {
 
 #creating EC2 instance
 resource "aws_instance" "fish" {
-  ami                         = "ami-0ddc798b3f1a5117e"
+  ami                         = "ami-0984f4b9e98be44bf"
   instance_type               = "t2.micro"
   key_name                    = "yash"
   subnet_id                   = aws_subnet.web-subnet1.id
